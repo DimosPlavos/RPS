@@ -1,74 +1,121 @@
-function getComputerChoice() {
-    const choiceNumber = Math.floor(Math.random()*3);
-    if (choiceNumber==1) {
-      alert ("Computer had Rock.");
-      return 'rock';
-    }else if(choiceNumber==2){
-      alert ("Computer had Paper.");
-      return 'paper';
-    }else{
-      alert ("Computer had Scissors.");
-      return 'scissors';
-    }
-  }
+const game = () =>{
+  let pScore =0
+  let cScore =0
+  let emojiP; 
+  let emojiC;
+  //Update Text
+  const winner = document.querySelector(".winner");
   
-  function playerRound(playerSelection, computerSelection){
+  const playRound = () =>{
+    const selections = document.querySelectorAll(".playerSelection button");
+  const computerOptions = ["rock", "paper", "scissors"];
+  
+  selections.forEach(sel => {
+      sel.addEventListener("click", function() {
+        //Computer Choice
+        const computerNumber = Math.floor(Math.random() * 3);
+        const computerChoice = computerOptions[computerNumber]; 
+        //Player Choice
+        const playerChoice = sel.dataset.selection
+        if (pScore==5 || cScore==5) return;
+         compareHands(playerChoice, computerChoice);
+        
+      });
     
-    let winner;
-    playerSelection = playerSelection.toLowerCase();
-    computerSelection = computerSelection.toLowerCase();
+    });  
+  }
+
+  const compareHands = (playerChoice, computerChoice) => {
     
-    if (playerSelection==computerSelection)
-      winner = 'No one, We have a Tie.';
-    else{
-      if (playerSelection=='paper'){
-        if (computerSelection=='rock'){
-               winner='Player.';
-        }else{
-            winner = 'Computer.';
-        }
-      }else if (playerSelection=='rock'){
-        if (computerSelection=='scissors'){
-               winner='Player.';
-        }else{
-            winner = 'Computer.';
-        }
-      }else if (playerSelection=='scissors'){
-        if (computerSelection=='paper'){
-               winner='Player.';
-        }else{
-            winner = 'Computer.';
-        }
+    const winner = document.querySelector(".winner");
+
+    //Checking for a tie
+    if (playerChoice === computerChoice) {
+      winner.textContent = "It is a tie";
+      if (playerChoice === "rock") emojiP = "✊";
+      else if (playerChoice === "paper") emojiP = "✋";
+      else emojiP = "✌";
+      emojiC = emojiP;
+      updateScore();
+      return;
+    }
+    //Check for Rock
+    if (playerChoice === "rock") {
+      emojiP = "✊";
+      if (computerChoice === "scissors") {
+        emojiC = "✌";
+        winner.textContent = "Player Wins";
+        pScore++;
+        updateScore();
+        
+        return;
+      } else {
+        emojiC = "✋";
+        winner.textContent = "Computer Wins";
+        cScore++;
+        updateScore();
+        
+        return;
       }
     }
-    alert( `Winner of Round is ${winner}` );
-    return winner;
-  }
-  
-  function game(){
-    
-    for (let i = 0; i < 5; i++) {
-      var playerSelection = prompt("Choose between: \nRock \nPaper \nScissors");
-      let computerSelection = getComputerChoice();
-      
-      const n = playerRound(playerSelection, computerSelection);
-      var p=0;
-      var c=0;
-      if (n=='Player.'){
-        p++;
-      } else if (n=='Computer.'){
-        c++;
-      } 
+    //Check for Paper
+    if (playerChoice === "paper") {
+      emojiP = "✋";
+      if (computerChoice === "scissors") {
+        emojiC = "✌";
+        winner.textContent = "Computer Wins";
+        cScore++;
+        updateScore();
+        return;
+      } else {
+        emojiC = "✊";
+        winner.textContent = "Player Wins";
+        
+        pScore++;
+        updateScore();
+        return;
+      }
     }
-    
-    alert ("Game Over");
-    if (p==c) {
-      alert ("The result is: Tie!");
-    }else if(p>c){
-      alert ("The result is: Player wins!");
-    }else{
-      alert ("The result is: Computer wins!");
+    //Check for Scissors
+    if (playerChoice === "scissors") {
+      emojiP = "✌";
+      if (computerChoice === "rock") {
+        emojiC = "✊";
+        winner.textContent = "Computer Wins";
+        cScore++;
+        updateScore();
+        return;
+      } else {
+        emojiC = "✋";
+        winner.textContent = "Player Wins";
+        
+        pScore++;
+        updateScore();
+        return;
+      }
     }
-  }
+  };
   
-  game();
+   const updateScore = () => {
+     if (pScore==5) {
+        winner.textContent = "You are the winner!";
+      }
+      if (cScore==5) {
+      winner.textContent = "Computer is the winner!";
+      }
+      const PR = document.querySelector('[data-your-emoji]')
+      const CR = document.querySelector('[data-computer-emoji]')
+      const playerScore = document.querySelector('[data-your-score]')
+      const computerScore = document.querySelector('[data-computer-score]')
+      PR.textContent = emojiP;
+      CR.textContent = emojiC;
+      playerScore.textContent = pScore;
+      computerScore.textContent = cScore;
+    };
+  
+  playRound();
+};
+
+game();
+
+  
