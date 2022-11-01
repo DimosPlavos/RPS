@@ -26,10 +26,10 @@ const game = () =>{
   }
 
   const compareHands = (playerChoice, computerChoice) => {
-    
+ 
     const winner = document.querySelector(".winner");
-
     //Checking for a tie
+    
     if (playerChoice === computerChoice) {
       winner.textContent = "It is a tie";
       if (playerChoice === "rock") emojiP = "✊";
@@ -117,5 +117,4 @@ const game = () =>{
 };
 
 game();
-
   
